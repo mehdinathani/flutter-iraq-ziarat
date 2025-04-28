@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:iraqziarat/features/home/home_page.dart';
 import 'package:iraqziarat/features/quran/bindings/quran_binding.dart';
+import 'package:iraqziarat/features/splash/splash_screen.dart';
 import 'data_initializer.dart';
 import 'features/quran/views/quran_page.dart';
 import 'features/reader/reader_binding.dart';
@@ -24,8 +26,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Rehnuma e Safar',
-      initialRoute: '/quran',
+      initialRoute: '/SplashScreen',
       getPages: [
+        GetPage(name: '/', page: () => const SplashScreen()),
+        GetPage(name: '/home', page: () => const HomePage()),
+
+        // GetPage(
+        //   name: '/ziarat',
+        //   page: () => ZiaratPage(),
+        //   binding: ZiaratBinding(),
+        // ),
         GetPage(
           name: '/quran',
           page: () => QuranPage(),

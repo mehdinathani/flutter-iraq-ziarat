@@ -1,11 +1,13 @@
 class ReadingItem {
   final String title;
-  final String content;
-  final String? audioPath; // <-- Add this
+  final List<String> arabic;
+  final List<String> translation;
+  final String? audioPath;
 
   ReadingItem({
     required this.title,
-    required this.content,
-    this.audioPath, // <-- Make it optional
+    required this.arabic,
+    required this.translation,
+    this.audioPath,
   });
 }

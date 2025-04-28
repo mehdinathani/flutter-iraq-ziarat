@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../models/reading_item.dart';
 
 class ReadingView<T> extends StatelessWidget {
   final List<T> items;
@@ -7,6 +8,7 @@ class ReadingView<T> extends StatelessWidget {
   final Future<void> Function()? onPlay;
   final void Function()? onNext;
   final void Function()? onPrev;
+  final RxBool? showTranslation;
 
   const ReadingView({
     super.key,
@@ -15,33 +17,67 @@ class ReadingView<T> extends StatelessWidget {
     this.onPlay,
     this.onNext,
     this.onPrev,
-    required RxBool showTranslation,
+    this.showTranslation,
   });
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (items.isEmpty) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       }
 
-      final item = items[index.value] as dynamic;
+      final item = items[index.value] as ReadingItem;
+
       return Column(
         children: [
-          Text(item.title, style: TextStyle(fontSize: 24)),
+          Text(item.title, style: const TextStyle(fontSize: 24)),
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Text(item.content),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(item.arabic.length, (i) {
+                  return Column(
+                    children: [
+                      Text(
+                        item.arabic[i],
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          height: 2,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (showTranslation?.value ?? false)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
+                          child: Text(
+                            item.translation[i],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      const Divider(),
+                    ],
+                  );
+                }),
+              ),
             ),
           ),
           if (onPlay != null)
-            IconButton(icon: Icon(Icons.play_arrow), onPressed: onPlay),
+            IconButton(icon: const Icon(Icons.play_arrow), onPressed: onPlay),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(icon: Icon(Icons.arrow_back), onPressed: onPrev),
-              IconButton(icon: Icon(Icons.arrow_forward), onPressed: onNext),
+              IconButton(icon: const Icon(Icons.arrow_back), onPressed: onPrev),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward),
+                onPressed: onNext,
+              ),
             ],
           ),
         ],
